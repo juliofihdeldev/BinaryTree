@@ -58,6 +58,43 @@ public class BinaryTree {
         inOrderRec(root);
     }
 
+    void deleteKey(int key) {
+        root  = deleteKeyRec(root,key);
+    }
+
+
+
+
+    Node deleteKeyRec(Node root, int key) {
+        if (root == null) {
+            return root;
+        }
+
+        if (root.key < key) {
+            root.left = deleteKeyRec(root.left, key);
+        } else if (root.key > key) {
+            root.right = deleteKeyRec(root.right, key);
+        } else {
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            }
+            root.key = minValue(root.right);
+            root.right = deleteKeyRec(root.right, root.key);
+        }
+        return root;
+    }
+    
+    int minValue(Node root) {
+        int minv = root.key;
+        while (root.left != null) {
+            minv = root.left.key;
+            root = root.left;
+        }
+        return minv;
+    }
+
 
     void inOrderRec(Node root) {
         if (root != null) {
@@ -75,6 +112,7 @@ public class BinaryTree {
           30      70
          /  \    /  \
         20   40  60   80 */
+
         tree.insert(50);
         tree.insert(30);
         tree.insert(20);
@@ -82,13 +120,14 @@ public class BinaryTree {
         tree.insert(70);
         tree.insert(60);
         tree.insert(80);
-
-        Node value = tree.search(tree.root, 50);
-
-            System.out.println("SEARCH RESULT " + value.key + " has been Found");
-        
  
-
         tree.inOrder();
+    
+        System.out.println("\nDelete 50");
+        tree.deleteKey(50);
+        System.out.println(
+            "inOrder traversal of the modified tree" );
+        tree.inOrder();
+
     }
 }
